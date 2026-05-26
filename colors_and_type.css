@@ -1,0 +1,205 @@
+/* ============================================================
+   Pilot Design System — Colors + Type
+   Source: pilot.com (forest green, cream, ember accent)
+   ============================================================ */
+
+:root {
+  /* ---------- Primary — Forest Green ---------- */
+  --color-primary:        #1B5E3B;
+  --color-primary-mid:    #2D7A52;   /* hover */
+  --color-primary-light:  #E8F5EE;   /* badge bg, alt sections */
+
+  /* ---------- Neutrals ---------- */
+  --color-dark:           #0F1117;   /* hero / high-contrast bg */
+  --color-gray-900:       #1A1A1A;   /* body text */
+  --color-gray-700:       #3D3D3D;
+  --color-gray-500:       #6B6B6B;   /* muted text */
+  --color-gray-300:       #C4C4C4;   /* borders */
+  --color-gray-100:       #F5F5F3;   /* alt section bg */
+  --color-cream:          #FAF9F7;   /* page bg */
+  --color-white:          #FFFFFF;
+
+  /* ---------- Accents ---------- */
+  --color-accent:         #D45A2B;   /* ember — urgency / secondary CTA */
+  --color-accent-light:   #FDF0EB;
+  --color-plum:           #2D1B5E;   /* deep purple — category tags */
+  --color-plum-light:     #F0EDFF;
+
+  /* ---------- Semantic ---------- */
+  --bg-page:              var(--color-cream);
+  --bg-surface:           var(--color-white);
+  --bg-alt:               var(--color-gray-100);
+  --bg-inverse:           var(--color-dark);
+
+  --fg-default:           var(--color-gray-900);
+  --fg-muted:             var(--color-gray-500);
+  --fg-subtle:            var(--color-gray-700);
+  --fg-on-dark:           var(--color-white);
+  --fg-link:              var(--color-primary);
+
+  --border-default:       rgba(0, 0, 0, 0.12);
+  --border-strong:        var(--color-gray-300);
+  --border-focus:         var(--color-primary);
+
+  /* ---------- Typography (families) ---------- */
+  --font-display:         Georgia, 'Times New Roman', serif;
+  --font-body:            'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono:            'SF Mono', Menlo, Consolas, monospace;
+
+  /* ---------- Type scale (raw) ---------- */
+  --fs-hero:              52px;     /* 40–52 fluid */
+  --fs-h1:                40px;
+  --fs-h2:                32px;     /* 28–36 */
+  --fs-h3:                20px;     /* card titles */
+  --fs-body-lg:           18px;
+  --fs-body:              16px;
+  --fs-body-sm:           15px;
+  --fs-small:             13px;     /* metadata */
+  --fs-label:             11px;     /* uppercase tags */
+  --fs-cta:               13px;     /* uppercase buttons */
+
+  --lh-tight:             1.1;
+  --lh-snug:              1.25;
+  --lh-normal:            1.5;
+  --lh-relaxed:           1.65;
+
+  --tracking-tight:       -0.01em;
+  --tracking-normal:      0;
+  --tracking-label:       0.10em;
+  --tracking-cta:         0.08em;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ---------- Radii ---------- */
+  --radius-none:  0px;
+  --radius-sm:    4px;     /* buttons, inputs */
+  --radius-md:    8px;     /* cards */
+  --radius-lg:    16px;    /* large surfaces */
+  --radius-pill:  100px;   /* badges / tags */
+
+  /* ---------- Shadows (soft, subtle) ---------- */
+  --shadow-xs:  0 1px 2px rgba(15, 17, 23, 0.04);
+  --shadow-sm:  0 2px 6px rgba(15, 17, 23, 0.06);
+  --shadow-md:  0 8px 24px rgba(15, 17, 23, 0.08);
+  --shadow-lg:  0 20px 48px rgba(15, 17, 23, 0.12);
+
+  /* ---------- Motion ---------- */
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:  120ms;
+  --dur-base:  200ms;
+  --dur-slow:  320ms;
+}
+
+/* ============================================================
+   Semantic typography classes
+   ============================================================ */
+
+.t-hero, h1.t-hero {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, var(--fs-hero));
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-default);
+}
+
+.t-h1, h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-default);
+}
+
+.t-h2, h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: 400;
+  line-height: var(--lh-snug);
+  color: var(--fg-default);
+}
+
+.t-h3, h3 {
+  font-family: var(--font-body);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  color: var(--fg-default);
+}
+
+.t-body, p {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: var(--lh-relaxed);
+  color: var(--fg-default);
+}
+
+.t-body-sm {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-default);
+}
+
+.t-muted, .t-small {
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  line-height: var(--lh-normal);
+}
+
+.t-label {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--fg-muted);
+}
+
+.t-label-green {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--color-primary);
+}
+
+.t-stat {
+  font-family: var(--font-body);
+  font-size: 40px;
+  font-weight: 500;
+  color: var(--color-primary);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.t-cta {
+  font-family: var(--font-body);
+  font-size: var(--fs-cta);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-cta);
+}
+
+code, .t-code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--color-gray-100);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}

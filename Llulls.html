@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Llulls — Ropa para perros con personalidad</title>
+<link rel="icon" href="assets/Logo.png">
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="brand.css">
+
+<!-- Code-referenced resources for bundler -->
+<meta name="ext-resource-dependency" content="assets/Logo.png" data-resource-id="logoImg" />
+<meta name="ext-resource-dependency" content="assets/Bretzel.png" data-resource-id="bretzelImg" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Thumbnail for bundler (required) -->
+<template id="__bundler_thumbnail" data-bg-color="#FAF6F0">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#FAF6F0"/>
+    <!-- Large coral circle -->
+    <circle cx="600" cy="400" r="180" fill="#E85D5D" opacity="0.95"/>
+    <!-- Small navy circle -->
+    <circle cx="650" cy="480" r="50" fill="#0F3B5E"/>
+  </svg>
+</template>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="products.jsx"></script>
+<script type="text/babel" src="sections.jsx"></script>
+<script type="text/babel" src="product-detail.jsx"></script>
+<script type="text/babel" src="checkout.jsx"></script>
+<script type="text/babel" src="thank-you.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useState } = React;
+
+window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{"heroLineHeight":1.1}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(window.TWEAK_DEFAULTS);
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [view, setView] = useState('home'); // 'home' | 'product-detail' | 'checkout' | 'thank-you'
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [lastOrder, setLastOrder] = useState(null);
+
+  const addToCart = (item) => {
+    setCart(prev => {
+      const key = `${item.id}-${item.size}`;
+      const existing = prev.find(p => `${p.id}-${p.size}` === key);
+      if (existing) {
+        return prev.map(p => `${p.id}-${p.size}` === key ? { ...p, qty: p.qty + 1 } : p);
+      }
+      return [...prev, { ...item, qty: 1 }];
+    });
+    setCartOpen(true);
+  };
+
+  const viewProduct = (product) => {
+    setSelectedProduct(product);
+    setView('product-detail');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const backToHome = () => {
+    setView('home');
+    setSelectedProduct(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToCheckout = () => {
+    setView('checkout');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const placeOrder = ({ name, email }) => {
+    setLastOrder({ items: cart, name, email });
+    setCart([]);
+    setView('thank-you');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const updateQty = (item, delta) => {
+    setCart(prev => prev
+      .map(p => (`${p.id}-${p.size}` === `${item.id}-${item.size}`) ? { ...p, qty: Math.max(0, p.qty + delta) } : p)
+      .filter(p => p.qty > 0)
+    );
+  };
+
+  const removeItem = (item) => {
+    setCart(prev => prev.filter(p => `${p.id}-${p.size}` !== `${item.id}-${item.size}`));
+  };
+
+  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      {view === 'home' && (
+        <div data-screen-label="Llulls — Home">
+          <TweaksPanel tweaks={tweaks} setTweak={setTweak}>
+            <TweakSection title="Hero">
+              <TweakSlider label="Interlineado del título" id="heroLineHeight" min={0.9} max={1.4} step={0.05} />
+            </TweakSection>
+          </TweaksPanel>
+
+          <AnnouncementBar />
+          <TopNav cartCount={cartCount} onOpenCart={() => setCartOpen(true)} />
+          <Hero />
+          <Marquee />
+          <ProductGrid onAddToCart={addToCart} onViewProduct={viewProduct} />
+          <SizingBand />
+          <Carousel />
+          <Manifesto />
+        </div>
+      )}
+
+      {view === 'product-detail' && selectedProduct && (
+        <div data-screen-label={`Llulls — ${selectedProduct.name}`}>
+          <AnnouncementBar />
+          <TopNav cartCount={cartCount} onOpenCart={() => setCartOpen(true)} />
+          <ProductDetail product={selectedProduct} onBack={backToHome} onAddToCart={addToCart} />
+        </div>
+      )}
+
+      {view === 'checkout' && (
+        <div data-screen-label="Llulls — Checkout">
+          <Checkout items={cart} onBack={backToHome} onPlaceOrder={placeOrder} />
+        </div>
+      )}
+
+      {view === 'thank-you' && lastOrder && (
+        <div data-screen-label="Llulls — Thank you">
+          <ThankYou items={lastOrder.items} name={lastOrder.name} email={lastOrder.email} onBack={backToHome} />
+        </div>
+      )}
+
+      <CartDrawer
+        open={cartOpen}
+        items={cart}
+        onClose={() => setCartOpen(false)}
+        onUpdate={updateQty}
+        onRemove={removeItem}
+        onCheckout={goToCheckout}
+      />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+/* ============================================================
+   Llulls Brand — overrides + complements to Pilot Design System
+   Logo colors: coral red, teal, deep navy, warm yellow
+   ============================================================ */
+
+:root {
+  /* ---------- Llulls Brand Palette ---------- */
+  --llulls-coral:        #E85D5D;
+  --llulls-coral-deep:   #D04848;
+  --llulls-coral-soft:   #FBE6E3;
+  --llulls-teal:         #2BA9A9;
+  --llulls-teal-deep:    #1F8888;
+  --llulls-teal-soft:    #DCF1F0;
+  --llulls-navy:         #0F3B5E;
+  --llulls-navy-deep:    #0A2B45;
+  --llulls-yellow:       #F4C152;
+  --llulls-yellow-soft:  #FBEFD2;
+
+  /* Repurpose Pilot tokens to Llulls */
+  --color-primary:        var(--llulls-coral);
+  --color-primary-mid:    var(--llulls-coral-deep);
+  --color-primary-light:  var(--llulls-coral-soft);
+
+  --color-accent:         var(--llulls-teal);
+  --color-accent-light:   var(--llulls-teal-soft);
+
+  --color-plum:           var(--llulls-navy);
+  --color-plum-light:     #E2EAF1;
+
+  --color-cream:          #FAF6F0;   /* slightly warmer cream */
+  --bg-page:              var(--color-cream);
+
+  --fg-link:              var(--llulls-coral);
+}
+
+/* override the green-coded helpers */
+.t-label-green { color: var(--llulls-coral) !important; }
+.t-stat        { color: var(--llulls-coral) !important; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--color-cream);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: var(--color-gray-900);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; }
+a { color: inherit; }
+
+/* helper for horizontal scrollbars to be visible but quiet */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
