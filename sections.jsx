@@ -795,7 +795,8 @@ function Manifesto() {
             padding: '15px 28px', borderRadius: 4,
             textTransform: 'uppercase', letterSpacing: '0.1em',
             fontSize: 12, fontWeight: 500, textDecoration: 'none',
-            display: 'inline-flex', alignItems: 'center', gap: 10
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            ...(isMobile ? { width: '100%', justifyContent: 'center' } : {})
           }}>
             Ver la colección <Icon.arrow size={14} />
           </a>
