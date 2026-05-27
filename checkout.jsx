@@ -2,6 +2,7 @@
 
 /* ---------- Checkout ---------- */
 function Checkout({ items, onBack, onPlaceOrder }) {
+  const isMobile = useIsMobile();
   const [form, setForm] = React.useState({
     email: '', name: '', address: '', apt: '', zip: '', city: '', phone: '',
   });
@@ -19,14 +20,14 @@ function Checkout({ items, onBack, onPlaceOrder }) {
       {/* Cream top bar — blends with page */}
       <header style={{
         background: 'var(--color-cream)',
-        padding: '18px 40px',
+        padding: isMobile ? '18px 20px' : '18px 40px',
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}>
         <button onClick={onBack} style={{
-          position: 'absolute', left: 40, top: '50%', transform: 'translateY(-50%)',
+          position: 'absolute', left: isMobile ? 16 : 40, top: '50%', transform: 'translateY(-50%)',
           background: 'transparent', border: 'none', color: 'var(--llulls-navy)',
           fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center',
           gap: 6, fontFamily: 'inherit', padding: 0,
@@ -39,7 +40,7 @@ function Checkout({ items, onBack, onPlaceOrder }) {
         </div>
 
         <div style={{
-          position: 'absolute', right: 40, top: '50%', transform: 'translateY(-50%)',
+          position: 'absolute', right: isMobile ? 16 : 40, top: '50%', transform: 'translateY(-50%)',
           display: 'inline-flex', alignItems: 'center', gap: 8,
           fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
           color: 'var(--llulls-coral)', fontWeight: 500,
@@ -53,8 +54,8 @@ function Checkout({ items, onBack, onPlaceOrder }) {
       </header>
 
       {/* Main grid */}
-      <div style={{ maxWidth: 1240, margin: '0 auto', padding: '64px 40px 96px',
-        display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 56, alignItems: 'start' }}>
+      <div style={{ maxWidth: 1240, margin: '0 auto', padding: isMobile ? '32px 20px 56px' : '64px 40px 96px',
+        display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 0.8fr', gap: isMobile ? 32 : 56, alignItems: 'start' }}>
 
         {/* LEFT: Shipping form */}
         <div>
@@ -98,14 +99,14 @@ function Checkout({ items, onBack, onPlaceOrder }) {
             <Field label="Dirección" placeholder="Calle y número"
               value={form.address} onChange={update('address')} />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
               <Field label="Piso / puerta (opcional)" placeholder="3º B"
                 value={form.apt} onChange={update('apt')} />
               <Field label="Código postal" placeholder="28004"
                 value={form.zip} onChange={update('zip')} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
               <Field label="Ciudad" placeholder="Madrid"
                 value={form.city} onChange={update('city')} />
               <Field label="Teléfono" type="tel" placeholder="600 123 456"
@@ -142,7 +143,7 @@ function Checkout({ items, onBack, onPlaceOrder }) {
 
         {/* RIGHT: Order summary */}
         <aside style={{
-          position: 'sticky', top: 32,
+          position: isMobile ? 'static' : 'sticky', top: isMobile ? 'auto' : 32,
           background: '#fff',
           border: '0.5px solid rgba(15,59,94,0.10)',
           borderRadius: 12,

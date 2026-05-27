@@ -1,6 +1,16 @@
 /* eslint-disable */
 const { useState, useEffect, useRef, useMemo } = React;
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
+}
+
 /* ============================================================
    Llulls — page components
    ============================================================ */
@@ -73,13 +83,14 @@ function LlullsLogo({ size = 36 }) {
 
 /* ---------- Top announcement bar ---------- */
 function AnnouncementBar() {
+  const isMobile = useIsMobile();
   return (
     <div style={{
       background: 'var(--llulls-navy)',
       color: '#fff',
-      padding: '10px 32px',
+      padding: isMobile ? '10px 20px' : '10px 32px',
       textAlign: 'center',
-      fontSize: 13,
+      fontSize: isMobile ? 12 : 13,
       letterSpacing: '0.02em'
     }}>
       Envío gratis a partir de 60€ — devoluciones gratis durante 30 días.{' '}
@@ -93,6 +104,7 @@ function AnnouncementBar() {
 /* ---------- Sticky nav with centered bouncing logo ---------- */
 function TopNav({ cartCount, onOpenCart }) {
   const [scrolled, setScrolled] = useState(false);
+  const isMobile = useIsMobile();
   useEffect(() => {
     const f = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', f);
@@ -109,23 +121,23 @@ function TopNav({ cartCount, onOpenCart }) {
       {/* Top white band for logo + cart (not sticky) */}
       <div style={{
         background: '#fff',
-        padding: '24px 40px',
+        padding: isMobile ? '16px 20px' : '24px 40px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative'
       }}>
         <div style={{
-          width: 72, height: 72,
+          width: isMobile ? 52 : 72, height: isMobile ? 52 : 72,
           animation: 'llulls-bounce 2s ease-in-out infinite'
         }}>
-          <img src={window.__resources?.logoImg || "assets/Logo.png"} alt="Llulls" style={{ width: 72, height: 72, display: 'block' }} />
+          <img src={window.__resources?.logoImg || "assets/Logo.png"} alt="Llulls" style={{ width: isMobile ? 52 : 72, height: isMobile ? 52 : 72, display: 'block' }} />
         </div>
-        
+
         {/* Cart in top right */}
         <div style={{
           position: 'absolute',
-          right: 40,
+          right: isMobile ? 20 : 40,
           top: '50%',
           transform: 'translateY(-50%)',
           color: 'var(--llulls-navy)'
@@ -162,18 +174,19 @@ const iconBtn = {
 
 /* ---------- Hero ---------- */
 function Hero() {
+  const isMobile = useIsMobile();
   return (
     <section style={{
-      padding: '72px 40px 96px',
+      padding: isMobile ? '40px 20px 48px' : '72px 40px 96px',
       background: '#fff',
       position: 'relative', overflow: 'hidden'
     }}>
-      <div style={{ maxWidth: 1240, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: 80, alignItems: 'center', zIndex: 1 }}>
+      <div style={{ maxWidth: 1240, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 0.95fr', gap: 80, alignItems: 'center', zIndex: 1 }}>
         <div>
 
           <h1 style={{
             fontFamily: 'Georgia, serif', fontWeight: 400,
-            fontSize: 'clamp(44px, 5.4vw, 76px)',
+            fontSize: isMobile ? 'clamp(32px, 8vw, 42px)' : 'clamp(44px, 5.4vw, 76px)',
             letterSpacing: '-0.015em',
             color: 'var(--llulls-navy)',
             textWrap: 'pretty', lineHeight: typeof TWEAK_DEFAULTS !== 'undefined' && TWEAK_DEFAULTS.heroLineHeight || 1.1
@@ -187,17 +200,20 @@ function Hero() {
               padding: '15px 28px', borderRadius: 4,
               textTransform: 'uppercase', letterSpacing: '0.1em',
               fontSize: 12, fontWeight: 500, textDecoration: 'none',
-              display: 'inline-flex', alignItems: 'center', gap: 10
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              ...(isMobile ? { width: '100%', justifyContent: 'center' } : {})
             }}>
               Ver la colección <Icon.arrow size={14} />
             </a>
           </div>
         </div>
 
-        {/* Right column: featured product card */}
-        <div style={{ position: 'relative' }}>
-          <HeroProductCard product={PRODUCTS[0]} />
-        </div>
+        {/* Right column: featured product card — hidden on mobile */}
+        {!isMobile && (
+          <div style={{ position: 'relative' }}>
+            <HeroProductCard product={PRODUCTS[0]} />
+          </div>
+        )}
       </div>
     </section>);
 
@@ -242,6 +258,7 @@ function HeroProductCard({ product }) {
 
 /* ---------- Marquee — what they wear ---------- */
 function Marquee() {
+  const isMobile = useIsMobile();
   const items = ['Algodón orgánico', '· Hecho en Madrid', '· ¿Hay algo más impactante que ver a un galgo corriendo?', '· ¿Tu también te quedaste sin sofá?', '· ¿Tu también te quedaste sin sofá?', '· Ediciones limitadas'];
   return (
     <div style={{
@@ -255,7 +272,7 @@ function Marquee() {
       <div style={{
         display: 'flex', gap: 36, whiteSpace: 'nowrap',
         animation: 'llulls-marquee 25s linear infinite',
-        fontFamily: 'Georgia, serif', fontSize: 22, fontStyle: 'italic'
+        fontFamily: 'Georgia, serif', fontSize: isMobile ? 17 : 22, fontStyle: 'italic'
       }}>
         {[...items, ...items, ...items].map((t, i) =>
         <span key={i} style={{ paddingRight: 10 }}>{t}</span>
@@ -273,6 +290,7 @@ function Marquee() {
 
 /* ---------- Product grid ---------- */
 function ProductGrid({ onAddToCart, onViewProduct }) {
+  const isMobile = useIsMobile();
   const armario = PRODUCTS.filter((p) => p.id === 'chaleco' || p.id === 'pajarita');
   const complementos = PRODUCTS.filter((p) => p.id === 'collar' || p.id === 'correa');
 
@@ -284,7 +302,7 @@ function ProductGrid({ onAddToCart, onViewProduct }) {
 
 
   const grid = (items) =>
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 32 }}>
+  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 20 : 32 }}>
       {items.map((p, i) =>
     <ProductCard key={p.id} product={p} index={i} onAddToCart={onAddToCart} onViewProduct={onViewProduct} />
     )}
@@ -292,9 +310,9 @@ function ProductGrid({ onAddToCart, onViewProduct }) {
 
 
   return (
-    <section id="tienda" style={{ padding: '120px 40px 80px', background: 'var(--color-cream)' }}>
+    <section id="tienda" style={{ padding: isMobile ? '56px 20px 48px' : '120px 40px 80px', background: 'var(--color-cream)' }}>
       <div style={{ maxWidth: 1240, margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 72, flexWrap: 'wrap', gap: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: isMobile ? 40 : 72, flexWrap: 'wrap', gap: 24 }}>
           <div>
             <div style={{ fontSize: 11, color: 'var(--llulls-coral)', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500, marginBottom: 14 }}>La colección</div>
             <h2 style={{
@@ -313,7 +331,7 @@ function ProductGrid({ onAddToCart, onViewProduct }) {
         {grid(armario)}
 
         {/* Group 2 — Los complementos */}
-        <div style={{ marginTop: 72 }}>
+        <div style={{ marginTop: isMobile ? 48 : 72 }}>
           {groupHeader('Los complementos')}
           {grid(complementos)}
         </div>
@@ -323,6 +341,7 @@ function ProductGrid({ onAddToCart, onViewProduct }) {
 }
 
 function ProductCard({ product, index, onAddToCart, onViewProduct }) {
+  const isMobile = useIsMobile();
   const [size, setSize] = useState('M');
   const [hover, setHover] = useState(false);
   const [added, setAdded] = useState(false);
@@ -382,9 +401,9 @@ function ProductCard({ product, index, onAddToCart, onViewProduct }) {
       </div>
 
       {/* Body */}
-      <div style={{ padding: '24px 26px 26px' }}>
+      <div style={{ padding: isMobile ? '18px 16px 18px' : '24px 26px 26px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16 }}>
-          <h3 style={{ fontFamily: 'Georgia, serif', fontSize: 26, color: 'var(--llulls-navy)', fontWeight: 400, letterSpacing: '-0.005em' }}>
+          <h3 style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 22 : 26, color: 'var(--llulls-navy)', fontWeight: 400, letterSpacing: '-0.005em' }}>
             {product.name}
           </h3>
           <div style={{ fontFamily: 'Georgia, serif', fontSize: 22, color: 'var(--llulls-navy)' }}>
@@ -401,7 +420,7 @@ function ProductCard({ product, index, onAddToCart, onViewProduct }) {
               key={s}
               onClick={(e) => {e.stopPropagation();setSize(s);}}
               style={{
-                width: 44, height: 44, borderRadius: 4,
+                width: isMobile ? 40 : 44, height: isMobile ? 40 : 44, borderRadius: 4,
                 border: size === s ? '1.5px solid var(--llulls-navy)' : '0.5px solid rgba(15,59,94,0.22)',
                 background: size === s ? 'var(--llulls-navy)' : '#fff',
                 color: size === s ? '#fff' : 'var(--llulls-navy)',
@@ -417,7 +436,7 @@ function ProductCard({ product, index, onAddToCart, onViewProduct }) {
             onClick={(e) => {e.stopPropagation();handleAdd();}}
             style={{
               marginLeft: 'auto',
-              padding: '13px 22px',
+              padding: isMobile ? '11px 12px' : '13px 22px',
               background: added ? 'var(--llulls-teal)' : 'var(--llulls-coral)',
               color: '#fff', border: 'none', borderRadius: 4,
               fontSize: 12, fontWeight: 500, textTransform: 'uppercase',
@@ -526,14 +545,15 @@ function ProductCard({ product, index, onAddToCart, onViewProduct }) {
 
 /* ---------- Sizing band ---------- */
 function SizingBand() {
+  const isMobile = useIsMobile();
   const rows = [
   { size: 'S', pecho: '70 - 75 cm', espalda: '65 - 70 cm', color: '#2BA9A9' },
   { size: 'M', pecho: '76 - 81 cm', espalda: '71 - 76 cm', color: '#E89A4C' },
   { size: 'L', pecho: '82 - 86 cm', espalda: '77 - 84 cm', color: '#0F3B5E' }];
 
   return (
-    <section id="tallas" style={{ padding: '120px 40px', background: '#fff', borderTop: '0.5px solid rgba(15,59,94,0.08)', borderBottom: '0.5px solid rgba(15,59,94,0.08)' }}>
-      <div style={{ maxWidth: 1240, margin: '0 auto', display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: 80, alignItems: 'center' }}>
+    <section id="tallas" style={{ padding: isMobile ? '48px 20px' : '120px 40px', background: '#fff', borderTop: '0.5px solid rgba(15,59,94,0.08)', borderBottom: '0.5px solid rgba(15,59,94,0.08)' }}>
+      <div style={{ maxWidth: 1240, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '0.9fr 1.1fr', gap: isMobile ? 40 : 80, alignItems: 'center' }}>
         <div>
           <div style={{ fontSize: 11, color: 'var(--llulls-coral)', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500, marginBottom: 16 }}>Guía de tallas</div>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(32px, 3.4vw, 44px)', color: 'var(--llulls-navy)', fontWeight: 400, lineHeight: 1.1 }}>
@@ -587,16 +607,17 @@ const QUOTES = [
 
 
 function Carousel() {
+  const isMobile = useIsMobile();
   return (
-    <section id="comunidad" style={{ padding: '120px 0 100px', background: 'var(--llulls-navy)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+    <section id="comunidad" style={{ padding: isMobile ? '56px 0 48px' : '120px 0 100px', background: 'var(--llulls-navy)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
       {/* deco */}
       <div aria-hidden style={{ position: 'absolute', top: 60, right: -80, width: 280, height: 280, borderRadius: '50%', background: 'var(--llulls-teal)', opacity: 0.85 }} />
       <div aria-hidden style={{ position: 'absolute', bottom: -100, left: -60, width: 220, height: 220, borderRadius: '50%', background: 'var(--llulls-coral)', opacity: 1 }} />
 
-      <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 40px', position: 'relative' }}>
+      <div style={{ maxWidth: 1240, margin: '0 auto', padding: isMobile ? '0 20px' : '0 40px', position: 'relative' }}>
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontSize: 11, color: 'var(--llulls-yellow)', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500, marginBottom: 16 }}>EL CLUB DE LLULL — @SOYLLULL</div>
-          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: 'clamp(36px, 4.2vw, 56px)', fontWeight: 400, color: '#fff', lineHeight: 1.05, letterSpacing: '-0.01em', maxWidth: 720 }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 28 : 'clamp(36px, 4.2vw, 56px)', fontWeight: 400, color: '#fff', lineHeight: 1.05, letterSpacing: '-0.01em', maxWidth: 720 }}>
             En este club <em style={{ fontStyle: 'italic', color: 'var(--llulls-coral)' }}>saben de fashion.</em>
           </h2>
           <p style={{ marginTop: 16, fontSize: 16, color: 'rgba(255,255,255,0.72)', maxWidth: 540 }}>
@@ -613,7 +634,7 @@ function Carousel() {
           paddingLeft: 24
         }}>
           {[...CUSTOMERS, ...CUSTOMERS].map((c, i) =>
-          <CustomerCard key={i} idx={i} c={c} active={false} />
+          <CustomerCard key={i} idx={i} c={c} active={false} isMobile={isMobile} />
           )}
         </div>
       </div>
@@ -637,12 +658,12 @@ const navBtn = {
   transition: 'background 200ms, border-color 200ms'
 };
 
-function CustomerCard({ c, idx, active }) {
+function CustomerCard({ c, idx, active, isMobile }) {
   return (
     <figure
       data-card
       style={{
-        flex: '0 0 320px',
+        flex: isMobile ? '0 0 260px' : '0 0 320px',
         scrollSnapAlign: 'start',
         background: '#fff',
         borderRadius: 8,
@@ -693,19 +714,20 @@ function CustomerCard({ c, idx, active }) {
 
 /* ---------- Manifesto / story ---------- */
 function Manifesto() {
+  const isMobile = useIsMobile();
   return (
-    <section id="historia" style={{ padding: '120px 40px', background: 'var(--color-cream)' }}>
-      <div style={{ maxWidth: 980, margin: '0 auto' }}>
+    <section id="historia" style={{ padding: isMobile ? '48px 20px' : '120px 40px', background: 'var(--color-cream)' }}>
+      <div style={{ maxWidth: 980, margin: '0 auto', textAlign: isMobile ? 'center' : 'left' }}>
         <div style={{ fontSize: 11, color: 'var(--llulls-coral)', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500, marginBottom: 14 }}>Nuestra historia</div>
         <h2 style={{
           fontFamily: 'Georgia, serif', fontWeight: 400,
-          fontSize: 'clamp(36px, 4vw, 52px)',
+          fontSize: isMobile ? 'clamp(28px, 6vw, 36px)' : 'clamp(36px, 4vw, 52px)',
           color: 'var(--llulls-navy)', letterSpacing: '-0.01em',
           lineHeight: 1.1, maxWidth: 880
         }}>
           En octubre de 2021 adoptamos a <em style={{ fontStyle: 'italic', color: 'var(--llulls-coral)' }}>Llull</em>, un galgo con un corazón enorme… y un cuello aún más largo.
         </h2>
-        <p style={{ marginTop: 28, fontSize: 18, lineHeight: 1.7, color: 'var(--color-gray-700)', maxWidth: 720, fontFamily: 'Georgia, serif' }}>
+        <p style={{ marginTop: 28, fontSize: isMobile ? 16 : 18, lineHeight: 1.7, color: 'var(--color-gray-700)', maxWidth: 720, fontFamily: 'Georgia, serif' }}>
           Con la llegada del frío, nació una necesidad: encontrar ropa que abrigara su cuerpo delgado, sin apretar y sin restringir el movimiento de este corredor. Como no la encontramos, la creamos. Así nació Llull's.
         </p>
         <div style={{ marginTop: 32, fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: 18, color: 'var(--llulls-navy)' }}>
@@ -728,64 +750,9 @@ function Manifesto() {
 
 }
 
-/* ---------- Footer ---------- */
-function Footer() {
-  return (
-    <footer style={{ background: 'var(--llulls-navy)', color: '#fff', padding: '80px 40px 40px' }}>
-      <div style={{ maxWidth: 1240, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 48, paddingBottom: 56, borderBottom: '0.5px solid rgba(255,255,255,0.12)' }}>
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
-              <img src="assets/Logo.png" alt="" style={{ width: 44, height: 44 }} />
-              <span style={{ fontFamily: 'Georgia, serif', fontSize: 26 }}>Llulls</span>
-            </div>
-            <p style={{ marginTop: 18, fontSize: 14, color: 'rgba(255,255,255,0.66)', lineHeight: 1.65, maxWidth: 320 }}>
-              Ropa pensada para perros reales. Fundado en Madrid, 2024.
-              Hecho en pequeñas series, en talleres locales.
-            </p>
-            <form style={{ marginTop: 24, display: 'flex', gap: 8, maxWidth: 360 }} onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="tu@email.com"
-                style={{
-                  flex: 1, background: 'rgba(255,255,255,0.06)',
-                  border: '0.5px solid rgba(255,255,255,0.2)',
-                  color: '#fff', padding: '12px 14px', borderRadius: 4, fontSize: 14,
-                  outline: 'none'
-                }} />
-              <button type="submit" style={{
-                background: 'var(--llulls-coral)', color: '#fff', border: 'none',
-                padding: '12px 18px', borderRadius: 4, fontSize: 12,
-                textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500,
-                cursor: 'pointer'
-              }}>Suscribir</button>
-            </form>
-          </div>
-          {[
-          { h: 'Tienda', items: ['Jersey Malasaña', 'La Pajarita'] },
-          { h: 'Ayuda', items: ['Guía de tallas', 'Envíos', 'Devoluciones', 'Cuidado del producto', 'Contacto'] }].
-          map((col) =>
-          <div key={col.h}>
-              <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--llulls-yellow)', fontWeight: 500, marginBottom: 18 }}>{col.h}</div>
-              <ul style={{ listStyle: 'none', display: 'grid', gap: 12 }}>
-                {col.items.map((it) =>
-              <li key={it}><a href="#" style={{ fontSize: 14, color: 'rgba(255,255,255,0.78)', textDecoration: 'none' }}>{it}</a></li>
-              )}
-              </ul>
-            </div>
-          )}
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 28, fontSize: 12, color: 'rgba(255,255,255,0.5)', flexWrap: 'wrap', gap: 12 }}>
-          <span>© 2026 Llulls</span>
-          <span>Hecho con cuatro patas y dos manos.</span>
-        </div>
-      </div>
-    </footer>);
-
-}
-
 /* ---------- Cart drawer ---------- */
 function CartDrawer({ open, items, onClose, onUpdate, onRemove, onCheckout }) {
+  const isMobile = useIsMobile();
   const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
   return (
     <>
@@ -802,7 +769,7 @@ function CartDrawer({ open, items, onClose, onUpdate, onRemove, onCheckout }) {
       
       <aside style={{
         position: 'fixed', top: 0, right: 0, bottom: 0,
-        width: 'min(440px, 92vw)', background: 'var(--color-cream)',
+        width: isMobile ? '100%' : 'min(440px, 92vw)', background: 'var(--color-cream)',
         transform: open ? 'translateX(0)' : 'translateX(100%)',
         transition: 'transform 320ms cubic-bezier(0.22,1,0.36,1)',
         zIndex: 101, display: 'flex', flexDirection: 'column',
@@ -877,6 +844,6 @@ const qtyBtn = {
 };
 
 Object.assign(window, {
-  Icon, LlullsLogo, AnnouncementBar, TopNav, Hero, Marquee,
-  ProductGrid, ProductCard, SizingBand, Carousel, Manifesto, Footer, CartDrawer
+  useIsMobile, Icon, LlullsLogo, AnnouncementBar, TopNav, Hero, Marquee,
+  ProductGrid, ProductCard, SizingBand, Carousel, Manifesto, CartDrawer
 });
