@@ -212,7 +212,7 @@ function Hero() {
                     fontStyle: 'italic',
                     fontSize: 17,
                     color: 'var(--llulls-navy)',
-                  }}>Llull, el jefe.</div>
+                  }}>Llull</div>
                   <div style={{
                     marginTop: 4,
                     fontSize: 11,
@@ -314,6 +314,7 @@ function HeroProductCard({ product }) {
 /* ---------- Marquee — what they wear ---------- */
 function Marquee() {
   const isMobile = useIsMobile();
+  if (isMobile) return null;
   const items = ['Algodón orgánico', '· Hecho en Madrid', '· ¿Hay algo más impactante que ver a un galgo corriendo?', '· ¿Tu también te quedaste sin sofá?', '· ¿Tu también te quedaste sin sofá?', '· Ediciones limitadas'];
   return (
     <div style={{
