@@ -219,7 +219,7 @@ function Hero() {
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
                     color: 'var(--color-gray-500)',
-                  }}>Madrid, 2024</div>
+                  }}>Madrid, 2022</div>
                 </div>
                 {/* Sticker */}
                 <div style={{
