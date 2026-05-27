@@ -184,6 +184,61 @@ function Hero() {
       <div style={{ maxWidth: 1240, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 0.95fr', gap: 80, alignItems: 'center', zIndex: 1 }}>
         <div>
 
+          {/* Polaroid — mobile only */}
+          {isMobile && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}>
+              <div style={{
+                position: 'relative',
+                width: 280,
+                background: '#fff',
+                padding: '12px 12px 40px',
+                transform: 'rotate(2deg)',
+                boxShadow: '0 8px 32px rgba(15,17,23,0.13)',
+              }}>
+                <img
+                  src="assets/chaleco.png"
+                  alt="Llull"
+                  style={{
+                    width: '100%',
+                    aspectRatio: '1 / 1',
+                    objectFit: 'cover',
+                    objectPosition: 'center 15%',
+                    display: 'block',
+                  }}
+                />
+                <div style={{ marginTop: 10, textAlign: 'center' }}>
+                  <div style={{
+                    fontFamily: 'Georgia, serif',
+                    fontStyle: 'italic',
+                    fontSize: 17,
+                    color: 'var(--llulls-navy)',
+                  }}>Llull, el jefe.</div>
+                  <div style={{
+                    marginTop: 4,
+                    fontSize: 11,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    color: 'var(--color-gray-500)',
+                  }}>Madrid, 2024</div>
+                </div>
+                {/* Sticker */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 12,
+                  right: -6,
+                  background: '#F4C152',
+                  color: 'var(--llulls-navy)',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  borderRadius: 100,
+                  padding: '6px 10px',
+                  transform: 'rotate(-8deg)',
+                  whiteSpace: 'nowrap',
+                }}>★ El original</div>
+              </div>
+            </div>
+          )}
+
           <h1 style={{
             fontFamily: 'Georgia, serif', fontWeight: 400,
             fontSize: isMobile ? 'clamp(32px, 8vw, 42px)' : 'clamp(44px, 5.4vw, 76px)',
