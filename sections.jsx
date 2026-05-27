@@ -674,7 +674,7 @@ function Carousel() {
         <div style={{ marginBottom: 48 }}>
           <div style={{ fontSize: 11, color: 'var(--llulls-yellow)', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 500, marginBottom: 16 }}>EL CLUB DE LLULL — @SOYLLULL</div>
           <h2 style={{ fontFamily: 'Georgia, serif', fontSize: isMobile ? 28 : 'clamp(36px, 4.2vw, 56px)', fontWeight: 400, color: '#fff', lineHeight: 1.05, letterSpacing: '-0.01em', maxWidth: 720 }}>
-            En este club <em style={{ fontStyle: 'italic', color: 'var(--llulls-coral)' }}>saben de fashion.</em>
+            En este club saben de <em style={{ fontStyle: 'italic', color: 'var(--llulls-coral)' }}>fashion.</em>
           </h2>
           <p style={{ marginTop: 16, fontSize: 16, color: 'rgba(255,255,255,0.72)', maxWidth: 540 }}>
             Fotos enviadas por nuestra comunidad. Etiqueta a @soyllull en Instagram y sé parte del fashion club.
