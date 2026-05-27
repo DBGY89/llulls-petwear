@@ -3,6 +3,7 @@ const { useState } = React;
 
 /* ---------- Product Detail Page ---------- */
 function ProductDetail({ product, onBack, onAddToCart }) {
+  const isMobile = useIsMobile();
   const [selectedSize, setSelectedSize] = useState('M');
   const [added, setAdded] = useState(false);
 
@@ -19,9 +20,9 @@ function ProductDetail({ product, onBack, onAddToCart }) {
   ];
 
   return (
-    <div style={{ background: 'var(--color-cream)', minHeight: '100vh', padding: '60px 40px 120px' }}>
+    <div style={{ background: 'var(--color-cream)', minHeight: '100vh', padding: isMobile ? '20px 20px 80px' : '60px 40px 120px' }}>
       {/* Back button */}
-      <div style={{ maxWidth: 1240, margin: '0 auto 48px' }}>
+      <div style={{ maxWidth: 1240, margin: isMobile ? '0 auto 20px' : '0 auto 48px' }}>
         <button onClick={onBack} style={{
           background: 'transparent', border: 'none', color: 'var(--llulls-navy)',
           fontSize: 14, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -32,63 +33,78 @@ function ProductDetail({ product, onBack, onAddToCart }) {
         </button>
       </div>
 
-      <div style={{ maxWidth: 1240, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
-        {/* Left: Product Image */}
+      <div style={{
+        maxWidth: 1240, margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+        gap: isMobile ? 28 : 80,
+        alignItems: 'start'
+      }}>
+        {/* Top/Left: Product Image */}
         <div style={{
-          aspectRatio: '4 / 3',
+          aspectRatio: isMobile ? '4 / 3' : '4 / 3',
           background: product.bg,
           borderRadius: 12,
           border: '0.5px solid rgba(15,59,94,0.08)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          position: 'sticky',
-          top: 40
+          position: isMobile ? 'static' : 'sticky',
+          top: isMobile ? 'auto' : 40
         }}>
           <DogScene product={product} />
         </div>
 
-        {/* Right: Product Info */}
+        {/* Bottom/Right: Product Info */}
         <div>
           {/* Name & Price */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: isMobile ? 'flex-start' : 'baseline',
+            marginBottom: 12,
+            gap: 12,
+          }}>
             <h1 style={{
               fontFamily: 'Georgia, serif',
-              fontSize: 'clamp(32px, 3.5vw, 44px)',
+              fontSize: isMobile ? 'clamp(26px, 7vw, 34px)' : 'clamp(32px, 3.5vw, 44px)',
               color: 'var(--llulls-navy)',
               fontWeight: 400,
               lineHeight: 1.1,
-              margin: 0
+              margin: 0,
+              flex: 1,
             }}>{product.name}</h1>
             <div style={{
-              fontSize: 28,
+              fontSize: isMobile ? 22 : 28,
               fontFamily: 'Georgia, serif',
               color: 'var(--llulls-navy)',
-              fontWeight: 500
+              fontWeight: 500,
+              whiteSpace: 'nowrap',
+              paddingTop: isMobile ? 4 : 0,
             }}>{product.price}€</div>
           </div>
 
           {/* Short description */}
           <p style={{
-            fontSize: 18,
+            fontSize: isMobile ? 16 : 18,
             lineHeight: 1.6,
             color: 'var(--color-gray-700)',
-            marginTop: 16,
-            marginBottom: 36
+            marginTop: 12,
+            marginBottom: isMobile ? 24 : 36,
           }}>
             {product.tagline}
           </p>
 
           {/* Size selector */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--color-gray-500)', fontWeight: 500, marginBottom: 12 }}>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--color-gray-500)', fontWeight: 500, marginBottom: 10 }}>
               Talla
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               {['S', 'M', 'L'].map(s => (
                 <button key={s} onClick={() => setSelectedSize(s)} style={{
                   flex: 1,
-                  padding: '14px',
+                  padding: isMobile ? '12px' : '14px',
                   background: selectedSize === s ? 'var(--llulls-navy)' : '#fff',
                   color: selectedSize === s ? '#fff' : 'var(--llulls-navy)',
                   border: selectedSize === s ? 'none' : '1px solid rgba(15,59,94,0.18)',
@@ -108,7 +124,7 @@ function ProductDetail({ product, onBack, onAddToCart }) {
           {/* Add to cart button */}
           <button onClick={handleAdd} style={{
             width: '100%',
-            padding: '18px',
+            padding: isMobile ? '16px' : '18px',
             background: added ? '#1F8A5B' : 'var(--llulls-coral)',
             color: '#fff',
             border: 'none',
@@ -124,23 +140,23 @@ function ProductDetail({ product, onBack, onAddToCart }) {
             gap: 10,
             transition: 'background 200ms',
             fontFamily: 'inherit',
-            marginBottom: 40
+            marginBottom: isMobile ? 28 : 40,
           }}>
             {added ? <><Icon.check size={16} /> Añadido</> : <>Añadir al carrito · {product.price}€</>}
           </button>
 
           {/* Separator */}
-          <div style={{ height: 1, background: 'rgba(15,59,94,0.1)', marginBottom: 32 }} />
+          <div style={{ height: 1, background: 'rgba(15,59,94,0.1)', marginBottom: 28 }} />
 
           {/* Material section */}
-          <div style={{ marginBottom: 32 }}>
+          <div style={{ marginBottom: 28 }}>
             <h3 style={{
               fontSize: 11,
               textTransform: 'uppercase',
               letterSpacing: '0.14em',
               color: 'var(--llulls-coral)',
               fontWeight: 500,
-              marginBottom: 12
+              marginBottom: 10
             }}>Material</h3>
             <p style={{
               fontSize: 15,
@@ -152,14 +168,14 @@ function ProductDetail({ product, onBack, onAddToCart }) {
           </div>
 
           {/* Care section */}
-          <div style={{ marginBottom: 36 }}>
+          <div style={{ marginBottom: 32 }}>
             <h3 style={{
               fontSize: 11,
               textTransform: 'uppercase',
               letterSpacing: '0.14em',
               color: 'var(--llulls-coral)',
               fontWeight: 500,
-              marginBottom: 12
+              marginBottom: 10
             }}>Cuidado</h3>
             <p style={{
               fontSize: 15,
@@ -178,7 +194,7 @@ function ProductDetail({ product, onBack, onAddToCart }) {
               letterSpacing: '0.14em',
               color: 'var(--llulls-coral)',
               fontWeight: 500,
-              marginBottom: 16
+              marginBottom: 14
             }}>Tallas</h3>
             <div style={{
               background: '#fff',
@@ -187,11 +203,11 @@ function ProductDetail({ product, onBack, onAddToCart }) {
               overflow: 'hidden'
             }}>
               <div style={{
-                padding: '14px 20px',
+                padding: '12px 16px',
                 borderBottom: '0.5px solid rgba(15,59,94,0.10)',
                 display: 'grid',
-                gridTemplateColumns: '70px 1fr 1fr',
-                gap: 16,
+                gridTemplateColumns: '60px 1fr 1fr',
+                gap: 12,
                 fontSize: 11,
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
@@ -202,19 +218,19 @@ function ProductDetail({ product, onBack, onAddToCart }) {
               </div>
               {sizingRows.map(r => (
                 <div key={r.size} style={{
-                  padding: '14px 20px',
+                  padding: '12px 16px',
                   borderBottom: '0.5px solid rgba(15,59,94,0.06)',
                   display: 'grid',
-                  gridTemplateColumns: '70px 1fr 1fr',
-                  gap: 16,
+                  gridTemplateColumns: '60px 1fr 1fr',
+                  gap: 12,
                   alignItems: 'center',
-                  fontSize: 14,
+                  fontSize: isMobile ? 13 : 14,
                   color: 'var(--llulls-navy)',
                   background: selectedSize === r.size ? 'rgba(232,93,93,0.04)' : 'transparent'
                 }}>
                   <span style={{
                     fontFamily: 'Georgia, serif',
-                    fontSize: 20,
+                    fontSize: isMobile ? 18 : 20,
                     fontWeight: 500,
                     color: selectedSize === r.size ? 'var(--llulls-coral)' : 'var(--llulls-navy)'
                   }}>{r.size}</span>
