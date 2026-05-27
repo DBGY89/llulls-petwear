@@ -177,7 +177,7 @@ function Hero() {
   const isMobile = useIsMobile();
   return (
     <section style={{
-      padding: isMobile ? '40px 20px 48px' : '72px 40px 96px',
+      padding: isMobile ? '12px 20px 48px' : '72px 40px 96px',
       background: '#fff',
       position: 'relative', overflow: 'hidden'
     }}>
@@ -186,12 +186,12 @@ function Hero() {
 
           {/* Polaroid — mobile only */}
           {isMobile && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
               <div style={{
                 position: 'relative',
                 width: 280,
                 background: '#fff',
-                padding: '12px 12px 40px',
+                padding: '12px 12px 28px',
                 transform: 'rotate(2deg)',
                 boxShadow: '0 8px 32px rgba(15,17,23,0.13)',
               }}>
@@ -249,7 +249,7 @@ function Hero() {
             Marca diseñada para galgos. Inspirada por <span style={{ color: '#e85d5d' }}>Llull.</span>
           </h1>
 
-          <div style={{ marginTop: 36, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ marginTop: isMobile ? 16 : 36, display: 'flex', gap: 12, alignItems: 'center' }}>
             <a href="#tienda" style={{
               background: 'var(--llulls-navy)', color: '#fff',
               padding: '15px 28px', borderRadius: 4,
