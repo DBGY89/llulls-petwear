@@ -2,6 +2,7 @@
 
 /* ---------- Thank You page ---------- */
 function ThankYou({ items, name, email, onBack }) {
+  const isMobile = useIsMobile();
   const total = items.reduce((s, i) => s + i.price * (i.qty || 1), 0);
   const orderNum = React.useMemo(
     () => `#LLS-2024-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -16,12 +17,12 @@ function ThankYou({ items, name, email, onBack }) {
       {/* Cream top bar — blends with page */}
       <header style={{
         background: 'var(--color-cream)',
-        padding: '18px 40px',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: isMobile ? '18px 20px' : '18px 40px',
+        display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'flex-end' : 'center',
         position: 'relative',
       }}>
         <button onClick={onBack} style={{
-          position: 'absolute', left: 40, top: '50%', transform: 'translateY(-50%)',
+          position: 'absolute', left: isMobile ? 16 : 40, top: '50%', transform: 'translateY(-50%)',
           background: 'transparent', border: 'none', color: 'var(--llulls-navy)',
           fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', padding: 0,
         }}>← Volver a la tienda</button>

@@ -24,7 +24,7 @@ function Checkout({ items, onBack, onPlaceOrder }) {
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: isMobile ? 'flex-end' : 'center',
       }}>
         <button onClick={onBack} style={{
           position: 'absolute', left: isMobile ? 16 : 40, top: '50%', transform: 'translateY(-50%)',
@@ -41,7 +41,7 @@ function Checkout({ items, onBack, onPlaceOrder }) {
 
         <div style={{
           position: 'absolute', right: isMobile ? 16 : 40, top: '50%', transform: 'translateY(-50%)',
-          display: 'inline-flex', alignItems: 'center', gap: 8,
+          display: isMobile ? 'none' : 'inline-flex', alignItems: 'center', gap: 8,
           fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
           color: 'var(--llulls-coral)', fontWeight: 500,
         }}>
